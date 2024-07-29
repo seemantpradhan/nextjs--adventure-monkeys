@@ -1,0 +1,101 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model activities {
+  activityid       Int                @id @default(autoincrement())
+  activitytype     String             @db.VarChar(50)
+  name             String             @db.VarChar(255)
+  description      String?
+  locationid       Int?
+  price            Decimal            @db.Decimal(10, 2)
+  available        Boolean?           @default(true)
+  createdat        DateTime?          @default(now()) @db.Timestamp(6)
+  updatedat        DateTime?          @default(now()) @db.Timestamp(6)
+  locations        locations?         @relation(fields: [locationid], references: [locationid], onDelete: Cascade, onUpdate: NoAction)
+  activitybookings activitybookings[]
+}
+
+model activitybookings {
+  bookingid  Int         @id
+  activityid Int?
+  activities activities? @relation(fields: [activityid], references: [activityid], onDelete: Cascade, onUpdate: NoAction)
+  bookings   bookings    @relation(fields: [bookingid], references: [bookingid], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model bookings {
+  bookingid        Int               @id @default(autoincrement())
+  userid           Int?
+  bookingtype      String            @db.VarChar(50)
+  startdate        DateTime          @db.Date
+  enddate          DateTime          @db.Date
+  totalamount      Decimal           @db.Decimal(10, 2)
+  bookingstatus    String?           @default("Pending") @db.VarChar(50)
+  createdat        DateTime?         @default(now()) @db.Timestamp(6)
+  updatedat        DateTime?         @default(now()) @db.Timestamp(6)
+  activitybookings activitybookings?
+  users            users?            @relation(fields: [userid], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  caravanbookings  caravanbookings?
+  payments         payments[]
+}
+
+model caravanbookings {
+  bookingid Int       @id
+  caravanid Int?
+  bookings  bookings  @relation(fields: [bookingid], references: [bookingid], onDelete: Cascade, onUpdate: NoAction)
+  caravans  caravans? @relation(fields: [caravanid], references: [caravanid], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model caravans {
+  caravanid       Int               @id @default(autoincrement())
+  model           String            @db.VarChar(255)
+  make            String            @db.VarChar(255)
+  year            Int
+  capacity        Int
+  description     String?
+  priceperday     Decimal           @db.Decimal(10, 2)
+  available       Boolean?          @default(true)
+  createdat       DateTime?         @default(now()) @db.Timestamp(6)
+  updatedat       DateTime?         @default(now()) @db.Timestamp(6)
+  caravanbookings caravanbookings[]
+}
+
+model locations {
+  locationid   Int          @id @default(autoincrement())
+  locationname String       @db.VarChar(255)
+  address      String
+  city         String       @db.VarChar(255)
+  state        String       @db.VarChar(255)
+  postalcode   String       @db.VarChar(20)
+  createdat    DateTime?    @default(now()) @db.Timestamp(6)
+  updatedat    DateTime?    @default(now()) @db.Timestamp(6)
+  activities   activities[]
+}
+
+model payments {
+  paymentid     Int       @id @default(autoincrement())
+  bookingid     Int?
+  paymentamount Decimal   @db.Decimal(10, 2)
+  paymentdate   DateTime? @default(now()) @db.Timestamp(6)
+  paymentmethod String    @db.VarChar(50)
+  paymentstatus String?   @default("Pending") @db.VarChar(50)
+  createdat     DateTime? @default(now()) @db.Timestamp(6)
+  updatedat     DateTime? @default(now()) @db.Timestamp(6)
+  bookings      bookings? @relation(fields: [bookingid], references: [bookingid], onDelete: Cascade, onUpdate: NoAction)
+}
+
+model users {
+  id        Int        @id @default(autoincrement())
+  name      String     @db.VarChar(255)
+  email     String     @unique @db.VarChar(255)
+  phone     String?    @db.VarChar(20)
+  password  String     @db.VarChar(255)
+  createdat DateTime?  @default(now()) @db.Timestamp(6)
+  updatedat DateTime?  @default(now()) @db.Timestamp(6)
+  bookings  bookings[]
+}
