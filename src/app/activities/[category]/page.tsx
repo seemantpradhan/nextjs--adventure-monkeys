@@ -1,7 +1,7 @@
 import CategoryDetails from '@/app/activities/[category]/CategoryDetails';
 import ActivityOptionsCard from './ActivityOptionsCard';
 
-export interface AvailableOption   {
+export interface AvailableActivity   {
   caravanid: number
   model: string
   make: string
