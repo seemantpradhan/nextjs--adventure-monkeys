@@ -1,0 +1,110 @@
+# Entities and Relationships
+
+### Users
+Stores information about users who will book caravans.
+Relationships: A user can make multiple bookings.
+
+### Activities
+Stores details about different activities (hiking, hotels, etc.).
+Relationships: An activity can have multiple bookings.
+
+### ActivityBookings
+Stores information about bookings for different activities.
+Relationships: Each activity booking is associated with one user and one activity.
+
+### Caravans
+Stores details about caravans available for booking.
+Relationships: A caravan can have multiple bookings, but each booking is for one caravan.
+
+### Bookings
+Generalized to store bookings for different types (caravan, activity).
+Relationships: Each booking can be associated with a caravan, activity, or other types.
+
+### Locations
+Stores information about different locations where caravans can be picked up or dropped off.
+Relationships: Each caravan can be associated with multiple locations.
+
+### Payments
+Stores information about payments made for bookings.
+Relationships: Each payment is associated with one booking.
+
+
+# Database Tables
+### Users
+
+UserID (Primary Key)
+Name
+Email
+Phone
+Password (encrypted)
+CreatedAt
+UpdatedAt
+
+### Caravans
+
+CaravanID (Primary Key)
+Model
+Make
+Year
+Capacity
+Description
+PricePerDay
+Available (Boolean)
+CreatedAt
+UpdatedAt
+
+### Activities
+
+ActivityID (Primary Key)
+ActivityType (e.g., Hiking, Hotel)
+Name
+Description
+LocationID (Foreign Key to Locations)
+Price
+Available (Boolean)
+CreatedAt
+UpdatedAt
+
+### Locations
+
+LocationID (Primary Key)
+LocationName
+Address
+City
+State
+PostalCode
+CreatedAt
+UpdatedAt
+
+### Bookings
+
+BookingID (Primary Key)
+UserID (Foreign Key to Users)
+BookingType (e.g., Caravan, Activity)
+StartDate
+EndDate
+TotalAmount
+BookingStatus (e.g., Pending, Confirmed, Cancelled)
+CreatedAt
+UpdatedAt
+
+### CaravanBookings
+
+BookingID (Foreign Key to Bookings, Primary Key)
+CaravanID (Foreign Key to Caravans)
+
+### ActivityBookings
+
+BookingID (Foreign Key to Bookings, Primary Key)
+ActivityID (Foreign Key to Activities)
+
+### Payments
+
+PaymentID (Primary Key)
+BookingID (Foreign Key to Bookings)
+PaymentAmount
+PaymentDate
+PaymentMethod (e.g., Credit Card, PayPal)
+PaymentStatus (e.g., Completed, Pending)
+CreatedAt
+UpdatedAt

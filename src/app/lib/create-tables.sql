@@ -1,0 +1,87 @@
+-- Users Table
+CREATE TABLE Users (
+    UserID SERIAL PRIMARY KEY,
+    Name VARCHAR(255) NOT NULL,
+    Email VARCHAR(255) UNIQUE NOT NULL,
+    Phone VARCHAR(20),
+    Password VARCHAR(255) NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Caravans Table
+CREATE TABLE Caravans (
+    CaravanID SERIAL PRIMARY KEY,
+    Model VARCHAR(255) NOT NULL,
+    Make VARCHAR(255) NOT NULL,
+    Year INT NOT NULL,
+    Capacity INT NOT NULL,
+    Description TEXT,
+    PricePerDay DECIMAL(10, 2) NOT NULL,
+    Available BOOLEAN DEFAULT TRUE,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+-- Locations Table
+CREATE TABLE Locations (
+    LocationID SERIAL PRIMARY KEY,
+    LocationName VARCHAR(255) NOT NULL,
+    Address TEXT NOT NULL,
+    City VARCHAR(255) NOT NULL,
+    State VARCHAR(255) NOT NULL,
+    PostalCode VARCHAR(20) NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Activities Table
+CREATE TABLE Activities (
+    ActivityID SERIAL PRIMARY KEY,
+    ActivityType VARCHAR(50) NOT NULL,
+    Name VARCHAR(255) NOT NULL,
+    Description TEXT,
+    LocationID INT REFERENCES Locations(LocationID) ON DELETE CASCADE,
+    Price DECIMAL(10, 2) NOT NULL,
+    Available BOOLEAN DEFAULT TRUE,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Bookings Table
+CREATE TABLE Bookings (
+    BookingID SERIAL PRIMARY KEY,
+    UserID INT REFERENCES Users(UserID) ON DELETE CASCADE,
+    BookingType VARCHAR(50) NOT NULL,
+    StartDate DATE NOT NULL,
+    EndDate DATE NOT NULL,
+    TotalAmount DECIMAL(10, 2) NOT NULL,
+    BookingStatus VARCHAR(50) DEFAULT 'Pending',
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- CaravanBookings Table
+CREATE TABLE CaravanBookings (
+    BookingID INT PRIMARY KEY REFERENCES Bookings(BookingID) ON DELETE CASCADE,
+    CaravanID INT REFERENCES Caravans(CaravanID) ON DELETE CASCADE
+);
+
+-- ActivityBookings Table
+CREATE TABLE ActivityBookings (
+    BookingID INT PRIMARY KEY REFERENCES Bookings(BookingID) ON DELETE CASCADE,
+    ActivityID INT REFERENCES Activities(ActivityID) ON DELETE CASCADE
+);
+
+-- Payments Table
+CREATE TABLE Payments (
+    PaymentID SERIAL PRIMARY KEY,
+    BookingID INT REFERENCES Bookings(BookingID) ON DELETE CASCADE,
+    PaymentAmount DECIMAL(10, 2) NOT NULL,
+    PaymentDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    PaymentMethod VARCHAR(50) NOT NULL,
+    PaymentStatus VARCHAR(50) DEFAULT 'Pending',
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
