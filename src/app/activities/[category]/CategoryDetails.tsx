@@ -27,7 +27,6 @@ const image = {
 
 function CategoryDetails({ category }: { category: string }) {
   return (
-
     <CurvyLinesLayout>
       <Typography variant="h3" marked="center" component="h3" sx={{ mb: 6 }}>
         {category}

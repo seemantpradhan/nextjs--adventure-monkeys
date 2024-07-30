@@ -12,15 +12,17 @@ import { AvailableActivity } from './page';
 import Chip from '@mui/material/Chip';
 import Rating from '@mui/material/Rating';
 import BookingModal from '@/app/activities/[category]/BookingModal';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
-const imageUrl = 'https://images.unsplash.com/photo-1521115715763-2fcaa0608e9b?auto=format&fit=crop&w=400'
+const imageUrl = 'https://images.unsplash.com/photo-1594495894542-a46cc73e081a?auto=format&fit=crop&w=400'
 
-interface ActivityOptionsCard {
+interface ActivityOptionsCards {
   availableOptions: AvailableActivity[]
   activityCategory: string
 }
 
-export default function ActivityOptionsCard({ availableOptions, activityCategory }: ActivityOptionsCard) {
+export default function ActivityOptionsCards({ availableOptions, activityCategory }: ActivityOptionsCards) {
   const [openBooking, setOpenBooking] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<AvailableActivity | null>(null);
 
@@ -29,10 +31,18 @@ export default function ActivityOptionsCard({ availableOptions, activityCategory
     setSelectedActivity(option)
   }
 
+  const UnavailableActivity = <>
+    <Alert severity="warning" sx={{ margin: 'auto', maxWidth: '40rem' }}>
+      <AlertTitle>Work in progress!</AlertTitle>
+      This activity is currently not available. We are working on it and will soon be back with some exciting arrangements for this activity.
+    </Alert>
+  </>
+
   return <>
-    <Paper sx={{ display: 'flex', flexWrap: 'wrap', margin: '1rem' }}>
+    <Paper sx={{ display: 'flex', flexWrap: 'wrap', padding: '1rem' }}>
+      {!availableOptions?.length && UnavailableActivity}
       {
-        availableOptions.map((option) => {
+        availableOptions?.map((option) => {
           const { caravanid, model, capacity, available, description, priceperday } = option
           return <Card key={caravanid} sx={{ maxWidth: 345, margin: '1rem' }}>
             <CardMedia

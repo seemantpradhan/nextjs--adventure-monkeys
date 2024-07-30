@@ -1,6 +1,5 @@
 'use client'
 import * as React from 'react';
-import PropTypes from 'prop-types';
 import { styled } from '@mui/material/styles';
 
 import Container from '@mui/material/Container';
@@ -33,9 +32,7 @@ const Background = styled('div')({
   zIndex: -2,
 });
 
-function Landing(props: any) {
-  const { sxBackground, children } = props;
-
+function Landing() {
   return (
     <ProductHeroLayoutRoot>
       <Container

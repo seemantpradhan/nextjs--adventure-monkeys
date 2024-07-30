@@ -1,5 +1,5 @@
 import CategoryDetails from '@/app/activities/[category]/CategoryDetails';
-import ActivityOptionsCard from './ActivityOptionsCard';
+import ActivityOptionsCards from './ActivityOptionsCards';
 
 export interface AvailableActivity   {
   caravanid: number
@@ -29,13 +29,13 @@ async function fetchCaravans() {
 
 export default async function Page({ params }: { params: { category: string } }) {
   const {category} = params
-  let availableOptions
+  let availableOptions=[]
   if (category === 'Caravans'){
     availableOptions = await fetchCaravans()
   }
 
   return <>
     <CategoryDetails category={category} />
-    <ActivityOptionsCard availableOptions={availableOptions} activityCategory={category}/>
+    <ActivityOptionsCards availableOptions={availableOptions} activityCategory={category}/>
   </>
 }

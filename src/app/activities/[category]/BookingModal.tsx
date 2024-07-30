@@ -2,7 +2,6 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import { AvailableActivity } from './page';
 import Typography from '@mui/material/Typography';
@@ -52,27 +51,27 @@ export default function ScrollDialog({ open, setOpen, selectedActivity }: Scroll
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
       >
-        <DialogTitle id="scroll-dialog-title" color='secondary.main'>Booking:  {model}</DialogTitle>
+        <DialogTitle id="scroll-dialog-title" color='secondary.main'>Booking:  {`${caravanid} - ${model}`}</DialogTitle>
         <DialogContent dividers={true}>
-          <DialogContentText
+          {/* <DialogContentText
             id="scroll-dialog-description"
             // ref={descriptionElementRef}
             tabIndex={-1}
-          >
-            <Rating name="read-only" value={4.3} size="small" readOnly />
-            <Typography variant="body2" color="text.secondary">
-              {description} {description} {description} {description} {description}{description}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {`Capacity-${capacity}`}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {`Price per day- ${priceperday}`}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {available ? 'Currently available, book now!' : 'Sorry! Not Available.'}
-            </Typography>
-          </DialogContentText>
+          > */}
+          <Rating name="read-only" value={4.3} size="small" readOnly />
+          <Typography variant="body2" color="text.secondary">
+            {description} {description} {description} {description} {description}{description}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {`Capacity-${capacity}`}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {`Price per day- ${priceperday}`}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {available ? 'Currently available, book now!' : 'Sorry! Not Available.'}
+          </Typography>
+          {/* </DialogContentText> */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
