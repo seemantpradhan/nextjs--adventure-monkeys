@@ -1,6 +1,6 @@
+import Link from 'next/link';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import Container from '@mui/material/Container';
 import Typography from './common/Typography';
 import TextField from '@mui/material/TextField';

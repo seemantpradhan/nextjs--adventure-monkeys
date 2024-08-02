@@ -1,15 +1,17 @@
+import Link from 'next/link';
 import Image from 'next/image';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import AppBar from './common/AppBar';
 import Toolbar from './common/Toolbar';
 import Typography from '@mui/material/Typography';
+import { Margin } from '@mui/icons-material';
 
 
 const rightLink = {
   fontSize: 16,
   color: 'common.white',
   ml: 3,
+  margin: '0.5rem'
 };
 
 function AppHeader() {
@@ -20,11 +22,9 @@ function AppHeader() {
           <Box sx={{ flex: 1 }} />
 
           <Link
-            variant="h6"
-            underline="none"
             color="inherit"
             href="/landing"
-            sx={{ fontSize: 24, display: 'flex' }}
+            style={{ fontSize: 24, display: 'flex' }}
           >
             <Image src="/adventure_monkeys_logo.png" alt="Adventure Monkeys Logo" width={50} height={50} style={{margin: '0.4rem' }}/>
             <Typography variant="h4" align="center" component="h4" color='common.white' sx={{padding: '0.6rem 0' }}>
@@ -33,19 +33,14 @@ function AppHeader() {
           </Link>
           <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
             <Link
-              color="inherit"
-              variant="h6"
-              underline="none"
               href="/signin"
-              sx={rightLink}
+              style={rightLink}
             >
               {'Sign In'}
             </Link>
             <Link
-              variant="h6"
-              underline="none"
               href="/signup"
-              sx={{ ...rightLink, color: 'secondary.main' }}
+              style={{ ...rightLink, color: 'secondary.main' }}
             >
               {'Sign Up'}
             </Link>

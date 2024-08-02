@@ -14,28 +14,25 @@ export interface AvailableActivity   {
   updatedat: string
 }
 
-async function fetchCaravans() {
-  const response = await fetch('http://localhost:3001/api/caravans')
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
+// async function fetchCaravans() {
+//   const response = await fetch('http://localhost:3001/api/caravans')
+//   // The return value is *not* serialized
+//   // You can return Date, Map, Set, etc.
  
-  if (!response.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error('Failed to fetch data')
-  }
+//   if (!response.ok) {
+//     // This will activate the closest `error.js` Error Boundary
+//     throw new Error('Failed to fetch data')
+//   }
  
-  return response.json()
-}
+//   return response.json()
+// }
 
 export default async function Page({ params }: { params: { category: string } }) {
   const {category} = params
   let availableOptions=[]
-  if (category === 'Caravans'){
-    availableOptions = await fetchCaravans()
-  }
 
   return <>
     <CategoryDetails category={category} />
-    <ActivityOptionsCards availableOptions={availableOptions} activityCategory={category}/>
+    <ActivityOptionsCards activityCategory={category}/>
   </>
 }

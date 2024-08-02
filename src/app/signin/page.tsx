@@ -1,8 +1,8 @@
 'use client'
 import * as React from 'react';
+import Link from 'next/link';
 import { Field, Form, FormSpy } from 'react-final-form';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import { email, required } from '@/app/ui/form/validation';
 import RFTextField from '@/app/ui/form/RFTextField';
 import FormButton from '@/app/ui/form/FormButton';
@@ -39,11 +39,7 @@ export default function Page() {
           </Typography>
           <Typography variant="body2" align="center">
             {'Not a member yet? '}
-            <Link
-              href="/signup"
-              align="center"
-              underline="always"
-            >
+            <Link href="/signup" >
               Sign Up here
             </Link>
           </Typography>
@@ -101,7 +97,7 @@ export default function Page() {
           )}
         </Form>
         <Typography align="center">
-          <Link underline="always" href="/forgotpassword/">
+          <Link href="/forgotpassword/">
             Forgot password?
           </Link>
         </Typography>

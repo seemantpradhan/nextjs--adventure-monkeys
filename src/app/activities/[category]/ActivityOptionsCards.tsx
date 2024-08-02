@@ -14,17 +14,30 @@ import Rating from '@mui/material/Rating';
 import BookingModal from '@/app/activities/[category]/BookingModal';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import { useAppSelector } from '@/app/store/hooks';
+import { useGetActivityOptionsQuery } from '@/app/features/api/apiSlice';
+import Skeleton from '@mui/material/Skeleton';
 
 const imageUrl = 'https://images.unsplash.com/photo-1594495894542-a46cc73e081a?auto=format&fit=crop&w=400'
 
 interface ActivityOptionsCards {
-  availableOptions: AvailableActivity[]
   activityCategory: string
 }
 
-export default function ActivityOptionsCards({ availableOptions, activityCategory }: ActivityOptionsCards) {
+export default function ActivityOptionsCards({ activityCategory }: ActivityOptionsCards) {
   const [openBooking, setOpenBooking] = useState(false);
   const [selectedActivity, setSelectedActivity] = useState<AvailableActivity | null>(null);
+  const count = useAppSelector((state) => state.counter.count);
+
+  // Calling the `useGetActivityOptionsQuery()` hook automatically fetches data!
+  const {
+    data: availableOptions = [],
+    isLoading,
+    isSuccess,
+    isError,
+    error
+  } = useGetActivityOptionsQuery(activityCategory.toLowerCase())
+  
 
   const displayBooking = async (option: AvailableActivity) => {
     setOpenBooking(true)
@@ -38,9 +51,28 @@ export default function ActivityOptionsCards({ availableOptions, activityCategor
     </Alert>
   </>
 
+  if (isLoading) {
+    return Array.from({ length: 4 }).map(() => {
+      return <Skeleton variant="rectangular" animation="wave" width={300} height={200} sx={{ display: 'inline-flex', margin: '1rem' }} />
+    })
+  }
+
+  else if (isSuccess && !availableOptions?.length) {
+    return UnavailableActivity
+  }
+
+  else if (isError) {
+    console.error(error)
+    return <>
+      <Alert severity="error" sx={{ margin: 'auto', maxWidth: '40rem' }}>
+        <AlertTitle>Error!</AlertTitle>
+        Unable to process.
+      </Alert>
+    </>
+  }
+
   return <>
     <Paper sx={{ display: 'flex', flexWrap: 'wrap', padding: '1rem' }}>
-      {!availableOptions?.length && UnavailableActivity}
       {
         availableOptions?.map((option) => {
           const { caravanid, model, capacity, available, description, priceperday } = option
@@ -63,6 +95,7 @@ export default function ActivityOptionsCards({ availableOptions, activityCategor
             </CardContent>
             <CardContent>
               <Typography variant="body2" color="text.secondary">
+                {`Count - ${count}`}
                 {description}
               </Typography>
               <Typography variant="body2" color="text.secondary">

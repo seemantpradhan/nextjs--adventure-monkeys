@@ -1,8 +1,9 @@
-import ProductCategories from "./ActivityCategories";
+'use client'
+import ActivityCategories from "./ActivityCategories";
 
 export default function Page() {
     return (
         <>
-            <ProductCategories/>
+            <ActivityCategories/>
         </>);
 }

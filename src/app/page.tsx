@@ -3,6 +3,7 @@ import styles from '@/app/ui/home.module.css';
 import Link from "next/link";
 import Button from '@mui/material/Button';
 import AppHeader from "./ui/AppHeader";
+import Counter from "./features/counter/Counter";
 
 export default function RootPage() {
   return (

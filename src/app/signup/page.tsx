@@ -2,7 +2,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import Link from '@mui/material/Link';
 import { Field, Form, FormSpy } from 'react-final-form';
 import Typography from '@/app/ui/common/Typography';
 import AppForm from '@/app/ui/AppForm';
@@ -10,6 +9,7 @@ import { email, required } from '@/app/ui/form/validation';
 import RFTextField from '@/app/ui/form/RFTextField';
 import FormButton from '@/app/ui/form/FormButton';
 import FormFeedback from '@/app/ui/form/FormFeedback';
+import Link from 'next/link';
 
 function SignUp() {
   const [sent, setSent] = React.useState(false);
@@ -39,7 +39,7 @@ function SignUp() {
             Sign Up
           </Typography>
           <Typography variant="body2" align="center">
-            <Link href="/signin" underline="always">
+            <Link href="/signin">
               Already have an account?
             </Link>
           </Typography>

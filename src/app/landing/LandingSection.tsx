@@ -1,10 +1,17 @@
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import { useRouter } from 'next/navigation';
 
 const backgroundImage =
   'https://images.unsplash.com/photo-1534854638093-bada1813ca19?auto=format&fit=crop&w=1400';
 
 export default function LandingSection() {
+  const router = useRouter()
+
+  const handleExplore = () => {
+    router.push('/activities')
+  }
+
   return (
     <>
       {/* Increase the network loading priority of the background image. */}
@@ -29,7 +36,7 @@ export default function LandingSection() {
         variant="contained"
         size="large"
         component="a"
-        href="/activities"
+        onClick={handleExplore}
         sx={{ minWidth: 200 }}
       >
         Explore
