@@ -1,27 +1,104 @@
-import Image from "next/image";
-import styles from '@/app/ui/home.module.css';
+"use client";
+import { useEffect, useState } from "react";
+import { socket } from "../socket";
 import Link from "next/link";
-import Button from '@mui/material/Button';
-import AppHeader from "./ui/AppHeader";
-import Counter from "./features/counter/Counter";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import FormHelperText from "@mui/material/FormHelperText";
+import Input from "@mui/material/Input";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import SendIcon from '@mui/icons-material/Send'
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton";
 
 export default function RootPage() {
+  const [isConnected, setIsConnected] = useState(false);
+  const [transport, setTransport] = useState("N/A");
+  const [message, setMessage] = useState("");
+  useEffect(() => {
+    if (socket.connected) {
+      onConnect();
+    }
+
+    function onConnect() {
+      setIsConnected(true);
+      setTransport(socket.io.engine.transport.name);
+
+      socket.io.engine.on("upgrade", (transport) => {
+        setTransport(transport.name);
+      });
+    }
+
+    function onDisconnect() {
+      setIsConnected(false);
+      setTransport("N/A");
+    }
+
+    socket.on("connect", onConnect);
+    socket.on("disconnect", onDisconnect);
+
+    socket.on('chat message', (msg) => {
+      console.log('received confirmed', msg);
+    });
+
+    return () => {
+      socket.off("connect", onConnect);
+      socket.off("disconnect", onDisconnect);
+    };
+
+
+  }, []);
+
+  const handleTyping = (e) => {
+      setMessage(e.target.value)
+  }
+
+  const sendMessage = () => {
+    if (message) {
+      console.log('message sent', message);
+      socket.emit('chat message', message);
+      setMessage('')
+    }
+    else console.log('no message found', message);
+  }
+
   return (
     <>
-      {/* <AppHeader /> */}
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div className={styles.shape} />
-        <Image
-          src="/vercel.svg"
-          width={1000}
-          height={760}
-          style={{
-            backgroundColor: 'darkgray',
-            padding: '2rem'
-          }}
-          className="hidden md:block"
-          alt="Screenshots of the dashboard project showing desktop version"
-        />
+      <main className="flex min-h-screen flex-col items-center justify-between p-24" style={{ backgroundColor: 'lightslategray' }}>
+        <div>
+          <p>Status: {isConnected ? "connected" : "disconnected"}</p>
+          <p>Transport: {transport}</p>
+        </div>
+
+        <FormControl sx={{ m: 1, width: '25ch' }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">Message</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-message"
+            type='text'
+            multiline
+            fullWidth
+            value={message}
+            onChange={handleTyping}
+            placeholder="Type here..."
+            sx={{ minWidth: '40rem' }}
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="send-message"
+                  onClick={sendMessage}
+                  edge="end"
+                >
+                  <SendIcon />
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Message"
+          />
+        </FormControl>
+
+
         <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
           <Link
             className="mb-2 flex items-end justify-start rounded-md bg-blue-600 p-4 "
@@ -31,29 +108,8 @@ export default function RootPage() {
               Let's visit the Dashboard&nbsp;
             </div>
           </Link>
-          <Button variant="contained">Hello world</Button>
-          <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-            <a
-              className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{" "}
-              <Image
-                src="/vercel.svg"
-                alt="Vercel Logo"
-                className="dark:invert"
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
         </div>
-
       </main>
     </>
-
   );
 }
