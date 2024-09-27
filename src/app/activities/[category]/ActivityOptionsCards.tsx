@@ -32,24 +32,18 @@ export default function ActivityOptionsCards({ activityCategory }: ActivityOptio
   // Calling the `useGetActivityOptionsQuery()` hook automatically fetches data!
   const {
     data: availableOptions = [],
+    isFetching,
     isLoading,
     isSuccess,
     isError,
     error
   } = useGetActivityOptionsQuery(activityCategory.toLowerCase())
-  
+
 
   const displayBooking = async (option: AvailableActivity) => {
     setOpenBooking(true)
     setSelectedActivity(option)
   }
-
-  const UnavailableActivity = <>
-    <Alert severity="warning" sx={{ margin: 'auto', maxWidth: '40rem' }}>
-      <AlertTitle>Work in progress!</AlertTitle>
-      This activity is currently not available. We are working on it and will soon be back with some exciting arrangements for this activity.
-    </Alert>
-  </>
 
   if (isLoading) {
     return Array.from({ length: 4 }).map(() => {
@@ -58,7 +52,12 @@ export default function ActivityOptionsCards({ activityCategory }: ActivityOptio
   }
 
   else if (isSuccess && !availableOptions?.length) {
-    return UnavailableActivity
+    return <>
+      <Alert severity="warning" sx={{ margin: 'auto', maxWidth: '40rem' }}>
+        <AlertTitle>Work in progress!</AlertTitle>
+        This activity is currently not available. We are working on it and will soon be back with some exciting arrangements for this activity.
+      </Alert>
+    </>
   }
 
   else if (isError) {
